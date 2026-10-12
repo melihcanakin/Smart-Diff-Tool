@@ -1,0 +1,23 @@
+name: Bug report
+description: The report is wrong, or the tool crashed
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Smallest diff that reproduces it
+      description: Two short file versions are ideal. Please do not paste proprietary code.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Output of `semantic-diff --version` and `node --version`
+    validations:
+      required: true

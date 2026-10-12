@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dev-dependencies:
+        dependency-type: development
+    open-pull-requests-limit: 5
+    ignore:
+      # Pinned on purpose: tree-sitter-wasms grammars are built for this ABI. See docs/ARCHITECTURE.md.
+      - dependency-name: web-tree-sitter
+        update-types: ['version-update:semver-minor', 'version-update:semver-major']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

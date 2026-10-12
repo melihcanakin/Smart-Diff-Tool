@@ -1,0 +1,67 @@
+name: semantic-diff
+description: Separate signal from noise in a pull request. Reports how much of a diff is real change versus formatting and moved lines.
+author: Melihcan Akın
+branding:
+  icon: filter
+  color: blue
+
+inputs:
+  base:
+    description: Base ref or commit. Defaults to the pull request base.
+    default: ${{ github.event.pull_request.base.sha }}
+  feature:
+    description: Ref or commit to compare. Defaults to the pull request head.
+    default: ${{ github.event.pull_request.head.sha }}
+  threshold:
+    description: Fail the job when the signal ratio (0-100) is below this value. Empty disables the check.
+    default: ''
+  ignore:
+    description: Glob patterns to leave out, one per line.
+    default: ''
+  comment:
+    description: Create or update a single pull request comment with the report.
+    default: 'true'
+  github-token:
+    description: 'Token used to post the comment. Needs the pull-requests: write permission.'
+    default: ${{ github.token }}
+
+outputs:
+  ratio:
+    description: Percentage of changed lines that are real changes.
+    value: ${{ steps.run.outputs.ratio }}
+  total:
+    description: Changed lines.
+    value: ${{ steps.run.outputs.total }}
+  semantic:
+    description: Lines that are logic or comment changes.
+    value: ${{ steps.run.outputs.semantic }}
+  noise:
+    description: Lines that are formatting or moved code.
+    value: ${{ steps.run.outputs.noise }}
+  report:
+    description: Path to the JSON report.
+    value: ${{ steps.run.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+    - name: Build semantic-diff
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --ignore-scripts && npm run build
+    - name: Analyze
+      id: run
+      shell: bash
+      env:
+        SD_BASE: ${{ inputs.base }}
+        SD_FEATURE: ${{ inputs.feature }}
+        SD_THRESHOLD: ${{ inputs.threshold }}
+        SD_IGNORE: ${{ inputs.ignore }}
+        SD_COMMENT: ${{ inputs.comment }}
+        ACTION_PATH: ${{ github.action_path }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: bash "$ACTION_PATH/scripts/action.sh"
