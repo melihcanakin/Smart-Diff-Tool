@@ -14,6 +14,7 @@ set -uo pipefail
 tmp="${RUNNER_TEMP:-$(mktemp -d)}"
 cli=(node "$ACTION_PATH/dist/cli.js")
 
+# bash 3.2 (macOS runners) treats an empty array as unset under `set -u`, hence ${args[@]+...} below.
 args=()
 [[ -n "${SD_THRESHOLD:-}" ]] && args+=(--threshold "$SD_THRESHOLD")
 while IFS= read -r pattern; do
@@ -21,13 +22,13 @@ while IFS= read -r pattern; do
 done <<<"${SD_IGNORE:-}"
 
 # One analysis; the JSON and Markdown reports are rendered from the same run via the cache.
-"${cli[@]}" "$SD_BASE" "$SD_FEATURE" "${args[@]}" --quiet --output "$tmp/semantic-diff.md"
+"${cli[@]}" "$SD_BASE" "$SD_FEATURE" ${args[@]+"${args[@]}"} --quiet --output "$tmp/semantic-diff.md"
 status=$?
 if [[ $status -ne 0 && $status -ne 1 ]]; then
   echo "::error::semantic-diff failed with exit code $status" >&2
   exit "$status"
 fi
-"${cli[@]}" "$SD_BASE" "$SD_FEATURE" "${args[@]}" --quiet --output "$tmp/semantic-diff.json" || true
+"${cli[@]}" "$SD_BASE" "$SD_FEATURE" ${args[@]+"${args[@]}"} --quiet --output "$tmp/semantic-diff.json" || true
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
   cat "$tmp/semantic-diff.md" >>"$GITHUB_STEP_SUMMARY"
