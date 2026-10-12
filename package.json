@@ -13,13 +13,13 @@
     "mcp",
     "cli"
   ],
-  "homepage": "https://github.com/Smart-Yazilim/semantic-diff#readme",
+  "homepage": "https://github.com/melihcanakin/Smart-Diff-Tool#readme",
   "bugs": {
-    "url": "https://github.com/Smart-Yazilim/semantic-diff/issues"
+    "url": "https://github.com/melihcanakin/Smart-Diff-Tool/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Smart-Yazilim/semantic-diff.git"
+    "url": "git+https://github.com/melihcanakin/Smart-Diff-Tool.git"
   },
   "license": "MIT",
   "author": "Melihcan Akın",

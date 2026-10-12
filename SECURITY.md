@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please do **not** open a public issue. Use GitHub's
-["Report a vulnerability"](https://github.com/Smart-Yazilim/semantic-diff/security/advisories/new)
+["Report a vulnerability"](https://github.com/melihcanakin/Smart-Diff-Tool/security/advisories/new)
 form on the Security tab. You will get a first answer within a few days.
 
 ## Threat model

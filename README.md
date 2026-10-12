@@ -2,7 +2,7 @@
 
 > Separate signal from noise in code reviews.
 
-[![CI](https://github.com/Smart-Yazilim/semantic-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/Smart-Yazilim/semantic-diff/actions/workflows/ci.yml)
+[![CI](https://github.com/melihcanakin/Smart-Diff-Tool/actions/workflows/ci.yml/badge.svg)](https://github.com/melihcanakin/Smart-Diff-Tool/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D22.13-brightgreen.svg)](https://nodejs.org)
 
@@ -69,8 +69,8 @@ npm install -g semantic-diff     # needs Node >= 22.13 and git
 From source:
 
 ```bash
-git clone https://github.com/Smart-Yazilim/semantic-diff.git
-cd semantic-diff && npm ci && npm run build && npm link
+git clone https://github.com/melihcanakin/Smart-Diff-Tool.git
+cd Smart-Diff-Tool && npm ci && npm run build && npm link
 ```
 
 ## Usage
@@ -132,7 +132,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: Smart-Yazilim/semantic-diff@v3
+      - uses: melihcanakin/Smart-Diff-Tool@v3
         with:
           threshold: 10 # optional
 ```

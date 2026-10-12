@@ -7,8 +7,8 @@ Thanks for helping. The project is small on purpose; this page is all you need.
 Node.js 22.13 or newer and git.
 
 ```bash
-git clone https://github.com/Smart-Yazilim/semantic-diff.git
-cd semantic-diff
+git clone https://github.com/melihcanakin/Smart-Diff-Tool.git
+cd Smart-Diff-Tool
 npm ci
 npm start -- main HEAD        # runs src/cli.ts directly, no build step
 ```
