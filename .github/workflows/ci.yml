@@ -17,10 +17,10 @@ jobs:
     name: Lint, typecheck, build, coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -49,13 +49,24 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: npm
       - run: npm ci
-      - run: npm test
+      - name: Test
+        shell: bash
+        run: |
+          code=0
+          npm test >test.log 2>&1 || code=$?
+          cat test.log
+          if [ "$code" -ne 0 ]; then
+            # Job logs need admin rights to read; annotations are public, so surface failures there.
+            summary=$(grep -A40 'failing tests' test.log | head -60 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=Test failures::${summary}"
+          fi
+          exit "$code"
 
   test-windows:
     name: Test (windows-latest, experimental)
@@ -63,10 +74,21 @@ jobs:
     # Not verified on Windows yet; failures are reported without blocking merges.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm test
+      - name: Test
+        shell: bash
+        run: |
+          code=0
+          npm test >test.log 2>&1 || code=$?
+          cat test.log
+          if [ "$code" -ne 0 ]; then
+            # Job logs need admin rights to read; annotations are public, so surface failures there.
+            summary=$(grep -A40 'failing tests' test.log | head -60 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=Test failures::${summary}"
+          fi
+          exit "$code"
