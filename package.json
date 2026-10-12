@@ -1,34 +1,75 @@
 {
   "name": "semantic-diff",
-  "version": "2.0.0",
-  "description": "Separate signal from noise in code reviews",
-  "main": "semantic-diff.js",
-  "bin": {
-    "semantic-diff": "./semantic-diff.js"
-  },
-  "scripts": {
-    "start": "node semantic-diff.js"
-  },
+  "version": "3.0.0",
+  "description": "Separate signal from noise in code reviews: classify a diff into logic, comment, moved and formatting changes.",
   "keywords": [
     "git",
     "diff",
-    "semantic",
+    "semantic-diff",
     "code-review",
-    "pr",
+    "pull-request",
+    "prettier",
+    "tree-sitter",
+    "mcp",
     "cli"
   ],
-  "author": "Melihcan Akın",
-  "license": "MIT",
+  "homepage": "https://github.com/Smart-Yazilim/semantic-diff#readme",
+  "bugs": {
+    "url": "https://github.com/Smart-Yazilim/semantic-diff/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Smart-Yazilim/semantic-diff"
+    "url": "git+https://github.com/Smart-Yazilim/semantic-diff.git"
+  },
+  "license": "MIT",
+  "author": "Melihcan Akın",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "semantic-diff": "./dist/cli.js",
+    "semantic-diff-mcp": "./dist/mcp.js"
+  },
+  "files": [
+    "dist",
+    "schema",
+    "action.yml",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && chmod +x dist/cli.js dist/mcp.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-lines=85 --test-coverage-include=\"src/**\" \"test/**/*.test.ts\"",
+    "bench": "node scripts/bench.ts",
+    "start": "node src/cli.ts",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "diff": "^5.1.0",
-    "prettier": "^3.1.0"
+    "diff": "^9.0.0",
+    "prettier": "^3.1.0",
+    "tree-sitter-wasms": "^0.1.13",
+    "web-tree-sitter": "0.25.10"
   },
-  "engines": {
-    "node": ">=14.0.0"
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.5",
+    "eslint": "^10.12.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2"
   }
 }

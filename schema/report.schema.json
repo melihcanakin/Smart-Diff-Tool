@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Smart-Yazilim/semantic-diff/schema/report.schema.json",
+  "title": "semantic-diff report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "tool",
+    "target",
+    "base",
+    "feature",
+    "totals",
+    "breakdown",
+    "files",
+    "skipped",
+    "failed"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "breakdown": {
+      "type": "object",
+      "required": ["logic", "comment", "moved", "format"],
+      "additionalProperties": false,
+      "properties": {
+        "logic": { "type": "integer", "minimum": 0 },
+        "comment": { "type": "integer", "minimum": 0 },
+        "moved": { "type": "integer", "minimum": 0 },
+        "format": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": { "const": 1 },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": { "name": { "const": "semantic-diff" }, "version": { "type": "string" } }
+    },
+    "target": { "type": "string" },
+    "base": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+    "feature": { "type": "string", "pattern": "^[0-9a-f]{40,64}$" },
+    "totals": {
+      "type": "object",
+      "required": ["total", "semantic", "noise", "ratio"],
+      "additionalProperties": false,
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "semantic": { "type": "integer", "minimum": 0 },
+        "noise": { "type": "integer", "minimum": 0 },
+        "ratio": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "breakdown": { "$ref": "#/$defs/breakdown" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "old_file",
+          "status",
+          "engine",
+          "total",
+          "semantic",
+          "noise",
+          "ratio",
+          "breakdown"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "old_file": { "type": "string" },
+          "status": { "enum": ["added", "deleted", "modified", "renamed"] },
+          "engine": { "enum": ["prettier", "tree-sitter"] },
+          "total": { "type": "integer", "minimum": 0 },
+          "semantic": { "type": "integer", "minimum": 0 },
+          "noise": { "type": "integer", "minimum": 0 },
+          "ratio": { "type": "number", "minimum": 0, "maximum": 100 },
+          "breakdown": { "$ref": "#/$defs/breakdown" }
+        }
+      }
+    },
+    "skipped": { "type": "array", "items": { "type": "string" } },
+    "failed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "error"],
+        "additionalProperties": false,
+        "properties": { "file": { "type": "string" }, "error": { "type": "string" } }
+      }
+    }
+  }
+}
