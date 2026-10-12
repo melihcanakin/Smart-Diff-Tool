@@ -2,3 +2,5 @@ dist
 coverage
 node_modules
 package-lock.json
+# Deliberately unformatted: used to demonstrate semantic-diff on pull requests.
+examples
